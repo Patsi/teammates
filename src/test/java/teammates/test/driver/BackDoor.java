@@ -54,7 +54,7 @@ public final class BackDoor {
     
     /**
      * Removes given data. If given entities have already been deleted,
-     * it fails silently
+     * it fails silently.
      */
     public static String removeDataBundleFromDb(DataBundle dataBundle) {
         String dataBundleJson = Utils.getTeammatesGson().toJson(dataBundle);
@@ -109,10 +109,10 @@ public final class BackDoor {
         return Boolean.parseBoolean(makePostRequest(params));
     }
 
-    public static String uploadAndUpdateStudentProfilePicture(String googleId, String pictureKey) {
+    public static String uploadAndUpdateStudentProfilePicture(String googleId, String pictureDataJsonString) {
         Map<String, String> params = createParamMap(BackDoorOperation.OPERATION_EDIT_STUDENT_PROFILE_PICTURE);
         params.put(BackDoorOperation.PARAMETER_GOOGLE_ID, googleId);
-        params.put(BackDoorOperation.PARAMETER_PICTURE_DATA, pictureKey);
+        params.put(BackDoorOperation.PARAMETER_PICTURE_DATA, pictureDataJsonString);
         return makePostRequest(params);
     }
 
@@ -278,8 +278,8 @@ public final class BackDoor {
         return Utils.getTeammatesGson().fromJson(feedbackResponseJson, FeedbackResponseAttributes.class);
     }
     
-    public static List<FeedbackResponseAttributes> getFeedbackResponsesForReceiverForCourse(String courseId,
-                                                                                            String recipientEmail) {
+    public static List<FeedbackResponseAttributes>
+            getFeedbackResponsesForReceiverForCourse(String courseId, String recipientEmail) {
         Map<String, String> params =
                 createParamMap(BackDoorOperation.OPERATION_GET_FEEDBACK_RESPONSES_FOR_RECEIVER_AS_JSON);
         params.put(BackDoorOperation.PARAMETER_COURSE_ID, courseId);
@@ -289,8 +289,8 @@ public final class BackDoor {
                                                  new TypeToken<List<FeedbackResponseAttributes>>(){}.getType());
     }
     
-    public static List<FeedbackResponseAttributes> getFeedbackResponsesFromGiverForCourse(String courseId,
-                                                                                          String giverEmail) {
+    public static List<FeedbackResponseAttributes>
+            getFeedbackResponsesFromGiverForCourse(String courseId, String giverEmail) {
         Map<String, String> params =
                 createParamMap(BackDoorOperation.OPERATION_GET_FEEDBACK_RESPONSES_FOR_GIVER_AS_JSON);
         params.put(BackDoorOperation.PARAMETER_COURSE_ID, courseId);
@@ -325,7 +325,7 @@ public final class BackDoor {
             URLConnection conn = getConnectionToUrl(urlString);
             sendRequest(paramString, conn);
             return readResponse(conn);
-        } catch (IOException e) {
+        } catch (Exception e) {
             return TeammatesException.toStringWithStackTrace(e);
         }
     }
